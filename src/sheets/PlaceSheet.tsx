@@ -63,7 +63,7 @@ export default function PlaceSheet({ open, trip }: { open: boolean; trip: Trip }
       </div>
       <Field label="أو اكتب مدينة أخرى" value={form.city ?? ''} onChange={(v) => setField('city', v)} placeholder="باريس" />
 
-      <Field label="رابط جوجل ماب" value={form.map ?? ''} onChange={(v) => setField('map', v)} placeholder="يُبنى تلقائيًا من الاسم" dir="ltr" />
+      <Field label="رابط جوجل ماب" value={form.map ?? ''} onChange={(v) => setField('map', v)} placeholder="يُبنى تلقائيًا من الاسم" dir="ltr" align="left" />
     </Sheet>
   );
 }

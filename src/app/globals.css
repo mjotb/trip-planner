@@ -45,11 +45,18 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* الأرقام واللاتيني تُعزل عن سياق RTL حتى لا تنقلب */
-.num {
-  font-family: 'Poppins', system-ui, sans-serif;
-  direction: ltr;
-  unicode-bidi: isolate;
+/* الأرقام واللاتيني تُعزل عن سياق RTL حتى لا تنقلب.
+   تُوضع في طبقة components حتى تتمكّن أدوات Tailwind (text-center وغيرها)
+   من تجاوز المحاذاة عند الحاجة. */
+@layer components {
+  .num {
+    font-family: 'Poppins', system-ui, sans-serif;
+    direction: ltr;
+    unicode-bidi: isolate;
+    /* بلا هذا السطر تُحاذى الأرقام لليسار بينما تسمياتها العربية لليمين،
+       فتبدو كل قيمة منزاحة عن كلمتها. */
+    text-align: right;
+  }
 }
 
 /* أيقونة ملوّنة عبر mask — تتيح تلوين أي SVG بأي لون */

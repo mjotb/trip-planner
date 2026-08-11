@@ -127,7 +127,7 @@ export default function AiSheet({ open, trip, blocks }: { open: boolean; trip: T
         <>
           <div className="flex items-center gap-2 rounded-12 bg-surface px-3 py-2.5">
             <span className="text-[10.5px] text-muted-3">المدى</span>
-            <span className="num text-[11px] font-bold">{trip.start} ← {trip.end}</span>
+            <span className="text-[11px] font-bold">{fmtShort(trip.start)} ← {fmtShort(trip.end)}</span>
             <span className="mr-auto text-[10px] text-muted-3">{blocks.length} إقامة حاليًا</span>
           </div>
           <Field

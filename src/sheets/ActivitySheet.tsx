@@ -58,7 +58,7 @@ export default function ActivitySheet({ open }: { open: boolean }) {
 
       <TextArea label="ملاحظة" rows={2} value={form.note ?? ''} onChange={(v) => setField('note', v)} placeholder="حجز مسبق مطلوب" />
       <Field label="سطر الانتقال" value={form.transfer ?? ''} onChange={(v) => setField('transfer', v)} placeholder="مترو 51 · 18 د" />
-      <Field label="رابط جوجل ماب" value={form.map ?? ''} onChange={(v) => setField('map', v)} placeholder="يُبنى تلقائيًا من اسم النشاط" dir="ltr" />
+      <Field label="رابط جوجل ماب" value={form.map ?? ''} onChange={(v) => setField('map', v)} placeholder="يُبنى تلقائيًا من اسم النشاط" dir="ltr" align="left" />
     </Sheet>
   );
 }

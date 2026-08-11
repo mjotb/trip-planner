@@ -3,6 +3,7 @@
 import { useStore } from '@/lib/store';
 import { Btn, Chip, Field, Sheet, Stepper } from '@/components/ui';
 import { FLAGS, mapsLink } from '@/lib/constants';
+import { fmtShort } from '@/lib/dates';
 import { flagUrl } from '@/lib/asset';
 import type { Trip } from '@/lib/types';
 
@@ -79,15 +80,15 @@ export default function CitySheet({ open, isNew, trip }: { open: boolean; isNew:
       </div>
 
       <Field label="فندق الإقامة" value={form.hotel ?? ''} onChange={(v) => setField('hotel', v)} placeholder="اسم الفندق" />
-      <Field label="رابط الفندق في جوجل ماب" value={form.hotelMap ?? ''} onChange={(v) => setField('hotelMap', v)} placeholder="https://maps.google.com/…" dir="ltr" />
-      <Field label="رابط المدينة في جوجل ماب" value={form.map ?? ''} onChange={(v) => setField('map', v)} placeholder="يُبنى تلقائيًا من اسم المدينة" dir="ltr" />
+      <Field label="رابط الفندق في جوجل ماب" value={form.hotelMap ?? ''} onChange={(v) => setField('hotelMap', v)} placeholder="https://maps.google.com/…" dir="ltr" align="left" />
+      <Field label="رابط المدينة في جوجل ماب" value={form.map ?? ''} onChange={(v) => setField('map', v)} placeholder="يُبنى تلقائيًا من اسم المدينة" dir="ltr" align="left" />
 
       <Stepper label="عدد الليالي" value={nights} onChange={(v) => setField('nights', v)} />
 
       <span className="text-[9.5px] font-light leading-relaxed text-muted-3">
         تقليل العدد يحذف الليالي الأخيرة، وزيادته تضيف أيامًا متتالية بعد آخر ليلة
         {isNew ? ' ابتداءً من اليوم التالي لآخر ليلة في الرحلة' : ''} — ضمن مدى الرحلة
-        ({trip.start} ← {trip.end}). يمكنك دائمًا التعديل يدويًا في التقويم.
+        ({fmtShort(trip.start)} ← {fmtShort(trip.end)}). يمكنك دائمًا التعديل يدويًا في التقويم.
       </span>
     </Sheet>
   );

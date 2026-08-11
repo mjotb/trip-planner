@@ -87,11 +87,15 @@ export function Chip({
 /* ------------------------------------------------------------------ */
 
 export function Field({
-  label, value, onChange, placeholder, type = 'text', dir,
+  label, value, onChange, placeholder, type = 'text', dir, align,
 }: {
   label: string; value: string; onChange: (v: string) => void;
   placeholder?: string; type?: string; dir?: 'ltr' | 'rtl';
+  /** المحاذاة داخل الحقل. الافتراضي: يمين ليطابق العنوان العربي فوقه.
+   *  استخدم 'left' للروابط الطويلة حيث تهمّ رؤية بدايتها. */
+  align?: 'right' | 'left';
 }) {
+  const alignClass = (align ?? 'right') === 'left' ? 'text-left' : 'text-right';
   return (
     <label className="flex flex-col gap-1.5">
       <span className="text-[10.5px] font-medium text-muted-3">{label}</span>
@@ -101,7 +105,7 @@ export function Field({
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-12 border border-line bg-surface px-3 py-2.5 text-[12px] font-medium placeholder:font-light placeholder:text-muted-4"
+        className={`rounded-12 border border-line bg-surface px-3 py-2.5 text-[12px] font-medium placeholder:font-light placeholder:text-muted-4 ${alignClass}`}
       />
     </label>
   );
