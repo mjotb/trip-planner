@@ -4,8 +4,11 @@
   "private": true,
   "description": "مخطط الرحلات — الليلة هي وحدة الحساب",
   "scripts": {
+    "predev": "node scripts/scan-icons.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/scan-icons.mjs",
     "build": "next build",
+    "icons": "node scripts/scan-icons.mjs",
     "start": "npx serve out",
     "test": "node --test tests/nights.test.mjs",
     "test:store": "node tests/smoke.mjs",

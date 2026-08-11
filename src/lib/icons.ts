@@ -12,6 +12,8 @@
  *  - color: تُعرض كما هي بألوانها الأصلية. للشعارات والحالات الفارغة.
  */
 
+import { GENERATED } from './icons.generated';
+
 export type IconSlot =
   // شريط التبويب السفلي
   | 'tab-trip' | 'tab-nights' | 'tab-day' | 'tab-places' | 'tab-trips'
@@ -74,27 +76,34 @@ const BUILT_IN: Record<IconSlot, IconDef> = {
   'status-check': { file: 'ui/check.svg' },
 };
 
+/** كل الخانات — تستخدمها شاشة معاينة الأيقونات. */
+export const ALL_SLOTS = Object.keys(BUILT_IN) as IconSlot[];
+
 /**
  * ────────────── هنا تضع أيقوناتك ──────────────
  *
- * ضع الملف في  public/assets/custom/  ثم أضف سطرًا هنا:
+ * لا تحتاج تعديل هذا الملف إطلاقًا. يكفي:
  *
- *   'tab-trip': { file: 'custom/رحلتي.svg' },
+ *   ١ · سمِّ الملف باسم الخانة:  tab-trip.svg
+ *   ٢ · ضعه في:  public/assets/custom/
  *
- * وإن كانت الأيقونة ملوّنة ولا تريد تسطيح ألوانها:
+ * يلتقطه البناء تلقائيًا (عبر scripts/scan-icons.mjs) ويقرّر بنفسه
+ * أهي ملوّنة أم تتبع لون السياق، بحسب عدد ألوانها.
  *
- *   'brand-logo': { file: 'custom/logo.svg', mode: 'color' },
- *
- * أي خانة لا تذكرها هنا تبقى على أيقونتها المدمجة، فيمكنك الاستبدال
- * على دفعات بلا أن ينكسر شيء.
+ * أما OVERRIDES أدناه فلحالات نادرة فقط: أن ترغب في اسم ملف مختلف،
+ * أو أن تجبر وضع عرض معيّنًا خلافًا لما اكتشفه الماسح.
+ * ما تكتبه هنا يعلو على المكتشَف آليًا.
  */
-export const CUSTOM: Partial<Record<IconSlot, IconDef>> = {
-  // 'tab-trip': { file: 'custom/trip.svg' },
+export const OVERRIDES: Partial<Record<IconSlot, IconDef>> = {
+  // 'brand-logo': { file: 'custom/شعاري.svg', mode: 'color' },
 };
 
 export function iconDef(slot: IconSlot): IconDef {
-  return CUSTOM[slot] ?? BUILT_IN[slot];
+  return OVERRIDES[slot] ?? GENERATED[slot] ?? BUILT_IN[slot];
 }
 
-/** كل الخانات — تستخدمها شاشة معاينة الأيقونات. */
-export const ALL_SLOTS = Object.keys(BUILT_IN) as IconSlot[];
+/** الخانات التي استُبدلت بأيقونة من عندك. */
+export function customizedSlots(): IconSlot[] {
+  return ALL_SLOTS.filter((s) => OVERRIDES[s] || GENERATED[s]);
+}
+
