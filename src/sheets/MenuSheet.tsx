@@ -11,6 +11,7 @@ export default function MenuSheet({ open }: { open: boolean }) {
   const close = useStore((s) => s.closeSheet);
   const setPlaceMenu = useStore((s) => s.setPlaceMenu);
   const toast = useStore((s) => s.toast);
+  const fail = useStore((s) => s.fail);
 
   const [answer, setAnswer] = useState('');
   const [lines, setLines] = useState<MenuLine[]>([]);
@@ -24,15 +25,15 @@ export default function MenuSheet({ open }: { open: boolean }) {
   }
 
   function onParse() {
-    if (!answer.trim()) return toast('الصق ناتج الترجمة أولًا');
+    if (!answer.trim()) return fail('الصق ناتج الترجمة أولًا');
     const res = parseMenuLines(answer);
-    if (!res.ok) return toast(res.message);
+    if (!res.ok) return fail(res.message);
     setLines(res.data);
     toast(`تُرجم ${res.data.length} طبق`);
   }
 
   function onSave() {
-    if (!lines.length) return toast('لا يوجد شيء لحفظه');
+    if (!lines.length) return fail('لا يوجد شيء لحفظه');
     if (!placeId) {
       close();
       return toast('احفظ المطعم في «أماكني» أولًا لتبقى الترجمة معه');

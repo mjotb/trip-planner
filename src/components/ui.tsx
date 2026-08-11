@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { iconUrl } from '@/lib/asset';
+import { useStore } from '@/lib/store';
 
 /* ------------------------------------------------------------------ */
 /* أيقونة                                                              */
@@ -87,25 +88,32 @@ export function Chip({
 /* ------------------------------------------------------------------ */
 
 export function Field({
-  label, value, onChange, placeholder, type = 'text', dir, align,
+  label, value, onChange, placeholder, type = 'text', dir, align, name,
 }: {
   label: string; value: string; onChange: (v: string) => void;
   placeholder?: string; type?: string; dir?: 'ltr' | 'rtl';
   /** المحاذاة داخل الحقل. الافتراضي: يمين ليطابق العنوان العربي فوقه.
    *  استخدم 'left' للروابط الطويلة حيث تهمّ رؤية بدايتها. */
   align?: 'right' | 'left';
+  /** مفتاح الحقل في النموذج — يُحاط بالأحمر إن أشّرت عليه دالة fail. */
+  name?: string;
 }) {
+  const missing = useStore((s) => s.ui.missing);
+  const invalid = !!name && missing.includes(name);
   const alignClass = (align ?? 'right') === 'left' ? 'text-left' : 'text-right';
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[10.5px] font-medium text-muted-3">{label}</span>
+      <span className="text-[10.5px] font-medium" style={{ color: invalid ? '#DC2632' : '#868A8D' }}>
+        {label}
+        {invalid && ' · مطلوب'}
+      </span>
       <input
         type={type}
         dir={dir}
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className={`rounded-12 border border-line bg-surface px-3 py-2.5 text-[12px] font-medium placeholder:font-light placeholder:text-muted-4 ${alignClass}`}
+        className={`rounded-12 border bg-surface px-3 py-2.5 text-[12px] font-medium placeholder:font-light placeholder:text-muted-4 ${alignClass} ${invalid ? 'border-red' : 'border-line'}`}
       />
     </label>
   );
@@ -240,11 +248,16 @@ export function Sheet({
 /* Toast                                                               */
 /* ------------------------------------------------------------------ */
 
-export function Toast({ message }: { message: string }) {
+export function Toast({ message, kind = 'ok' }: { message: string; kind?: 'ok' | 'error' }) {
   if (!message) return null;
+  const error = kind === 'error';
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-[112px] z-50 flex justify-center px-6">
-      <div className="animate-toast rounded-12 bg-ink px-4 py-2.5 text-[11.5px] font-medium text-white shadow-toast">
+      <div
+        className="flex animate-toast items-center gap-2 rounded-12 px-4 py-2.5 text-[11.5px] font-medium text-white shadow-toast"
+        style={{ background: error ? '#DC2632' : '#0D151A' }}
+      >
+        {error && <span className="text-[13px] leading-none">!</span>}
         {message}
       </div>
     </div>

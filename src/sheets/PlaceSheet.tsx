@@ -13,11 +13,12 @@ export default function PlaceSheet({ open, trip }: { open: boolean; trip: Trip }
   const close = useStore((s) => s.closeSheet);
   const addPlace = useStore((s) => s.addPlace);
   const toast = useStore((s) => s.toast);
+  const fail = useStore((s) => s.fail);
 
   const type: PlaceType = form.type ?? 'food';
 
   function save() {
-    if (!form.name) return toast('اكتب اسم المكان');
+    if (!form.name) return fail('اكتب اسم المكان', ['name']);
     addPlace({
       name: form.name,
       city: form.city || '—',
@@ -45,7 +46,7 @@ export default function PlaceSheet({ open, trip }: { open: boolean; trip: Trip }
         ))}
       </div>
 
-      <Field label="الاسم" value={form.name ?? ''} onChange={(v) => setField('name', v)} placeholder="Dishoom Covent Garden" />
+      <Field name="name" label="الاسم" value={form.name ?? ''} onChange={(v) => setField('name', v)} placeholder="Dishoom Covent Garden" />
 
       <span className="text-[10.5px] font-medium text-muted-3">المدينة</span>
       <div className="flex flex-wrap gap-1.5">

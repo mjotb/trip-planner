@@ -108,6 +108,23 @@ const r = s().importJSON(json, 'merge');
 ok('الاستيراد بالدمج ينجح ويعيد تسمية المكرر', r.ok && s().trips.length === 4);
 ok('الاستيراد يرفض ملفًا غير متوافق', !s().importJSON('{"nope":1}', 'merge').ok);
 
+/* --- حراسة ضد عودة علّة «الحفظ يُبتلع بصمت» ---
+   الشاشات تعرض  trips.find(activeId) ?? trips[0]، فإن كتب التعديل إلى
+   activeId مباشرةً وكان معلّقًا، تختفي الإضافات مع إظهار رسالة نجاح. */
+ok('activeId يشير دائمًا إلى رحلة موجودة بعد الاستيراد',
+  !!s().trips.find((t) => t.id === s().activeId));
+
+useStore.setState({ activeId: 'معرّف-لا-وجود-له' });
+const shown = s().trips.find((t) => t.id === s().activeId) ?? s().trips[0]; // منطق الشاشة
+const flightsBefore = shown.flights.length;
+s().addFlight({ code: 'SV', airline: 'تجربة', kind: 'ذهاب', cabin: 'اقتصادي',
+  date: '2026-12-01', from: 'الرياض', to: 'لندن', dep: '09:00', arr: '14:00', dur: '5س' });
+const shownAfter = s().trips.find((t) => t.id === s().activeId) ?? s().trips[0];
+ok('الإضافة تصل للرحلة المعروضة حتى لو كان activeId معلّقًا',
+  shownAfter.flights.length === flightsBefore + 1);
+ok('التعديل يشفي activeId المعلّق ذاتيًا',
+  !!s().trips.find((t) => t.id === s().activeId));
+
 const messy =
   'طبعًا! إليك الخطة:\n```json\n{"items":[' +
   '{"type":"food","time":"9:30","dur":"ساعة","title":"فطور","note":"","query":"cafe tokyo","transfer":"مشي 5 د"},' +

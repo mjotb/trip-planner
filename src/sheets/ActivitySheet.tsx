@@ -14,11 +14,12 @@ export default function ActivitySheet({ open }: { open: boolean }) {
   const close = useStore((s) => s.closeSheet);
   const addItem = useStore((s) => s.addItem);
   const toast = useStore((s) => s.toast);
+  const fail = useStore((s) => s.fail);
 
   const type: ItemType = form.type ?? 'place';
 
   function save() {
-    if (!form.title) return toast('اكتب اسم النشاط');
+    if (!form.title) return fail('اكتب اسم النشاط', ['title']);
     addItem(day, {
       type,
       time: form.time || '10:00',
@@ -49,7 +50,7 @@ export default function ActivitySheet({ open }: { open: boolean }) {
         ))}
       </div>
 
-      <Field label="النشاط" value={form.title ?? ''} onChange={(v) => setField('title', v)} placeholder="زيارة متحف ريكس" />
+      <Field name="title" label="النشاط" value={form.title ?? ''} onChange={(v) => setField('title', v)} placeholder="زيارة متحف ريكس" />
 
       <div className="grid grid-cols-2 gap-2">
         <Field label="الوقت" type="time" value={form.time ?? ''} onChange={(v) => setField('time', v)} dir="ltr" />

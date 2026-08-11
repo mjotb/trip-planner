@@ -86,6 +86,10 @@ type UI = {
   day: DayKey;
   placeFilter: string;
   toast: string;
+  /** 'error' يعرض الرسالة بالأحمر حتى لا تُقرأ خطأً كتأكيد نجاح. */
+  toastKind: 'ok' | 'error';
+  /** أسماء الحقول الناقصة، تُحاط بإطار أحمر في الورقة المفتوحة. */
+  missing: string[];
   hydrated: boolean;
 };
 
@@ -109,6 +113,8 @@ type Actions = {
   closeSheet: () => void;
   setField: (k: string, v: any) => void;
   toast: (m: string) => void;
+  /** رسالة خطأ حمراء + تأشير الحقول الناقصة. تُعيد false دائمًا للاختصار. */
+  fail: (m: string, missing?: string[]) => false;
 
   // رحلات
   createTrip: (title: string, start: DayKey, end: DayKey) => void;
@@ -158,6 +164,8 @@ export const useStore = create<State & Actions>()(
         day: '2026-10-22',
         placeFilter: 'الكل',
         toast: '',
+        toastKind: 'ok',
+        missing: [],
         hydrated: false,
       },
 
@@ -166,30 +174,53 @@ export const useStore = create<State & Actions>()(
         return s.trips.find((t) => t.id === s.activeId) ?? s.trips[0];
       },
 
-      patch: (fn) =>
-        set((s) => {
-          const id = s.activeId || s.trips[0]?.id;
-          return {
-            trips: s.trips.map((t) => {
-              if (t.id !== id) return t;
-              const copy: Trip = JSON.parse(JSON.stringify(t));
-              fn(copy);
-              copy.updatedAt = Date.now();
-              return copy;
-            }),
-          };
-        }),
+      /**
+       * يعدّل الرحلة النشطة.
+       *
+       * حرجٌ أن يستهدف هذا نفس الرحلة التي تعرضها الواجهة بالضبط. لذلك يمرّ
+       * عبر trip() — نفس المُحدِّد الذي تستخدمه الشاشات — بدل مطابقة activeId
+       * مباشرة. سابقًا كان يطابق activeId، فإن صار معلّقًا (يشير إلى رحلة
+       * محذوفة أو أُعيدت تسمية معرّفها عند الاستيراد) عرضت الشاشة الرحلة الأولى
+       * بينما لم يطابق التعديل أي رحلة، فتُبتلع الإضافات بصمت مع رسالة نجاح.
+       */
+      patch: (fn) => {
+        const target = get().trip();
+        if (!target) return;
+        set((s) => ({
+          // شفاء ذاتي: يثبّت المعرّف على الرحلة المعروضة فعلًا
+          activeId: target.id,
+          trips: s.trips.map((t) => {
+            if (t.id !== target.id) return t;
+            const copy: Trip = JSON.parse(JSON.stringify(t));
+            fn(copy);
+            copy.updatedAt = Date.now();
+            return copy;
+          }),
+        }));
+      },
 
       setTab: (tab) => set((s) => ({ ui: { ...s.ui, tab } })),
       setTool: (tool) => set((s) => ({ ui: { ...s.ui, tool } })),
       setDay: (day) => set((s) => ({ ui: { ...s.ui, day } })),
       setPlaceFilter: (placeFilter) => set((s) => ({ ui: { ...s.ui, placeFilter } })),
-      openSheet: (sheet, form = {}) => set((s) => ({ ui: { ...s.ui, sheet, form } })),
-      closeSheet: () => set((s) => ({ ui: { ...s.ui, sheet: null, form: {} } })),
-      setField: (k, v) => set((s) => ({ ui: { ...s.ui, form: { ...s.ui.form, [k]: v } } })),
+      openSheet: (sheet, form = {}) => set((s) => ({ ui: { ...s.ui, sheet, form, missing: [] } })),
+      closeSheet: () => set((s) => ({ ui: { ...s.ui, sheet: null, form: {}, missing: [] } })),
+
+      // الكتابة في حقل ناقص تُزيل تأشيره فورًا
+      setField: (k, v) =>
+        set((s) => ({
+          ui: { ...s.ui, form: { ...s.ui.form, [k]: v }, missing: s.ui.missing.filter((m) => m !== k) },
+        })),
+
       toast: (toast) => {
-        set((s) => ({ ui: { ...s.ui, toast } }));
+        set((s) => ({ ui: { ...s.ui, toast, toastKind: 'ok' } }));
         if (toast) setTimeout(() => set((s) => (s.ui.toast === toast ? { ui: { ...s.ui, toast: '' } } : s)), 2400);
+      },
+
+      fail: (toast, missing = []) => {
+        set((s) => ({ ui: { ...s.ui, toast, toastKind: 'error', missing } }));
+        setTimeout(() => set((s) => (s.ui.toast === toast ? { ui: { ...s.ui, toast: '' } } : s)), 3200);
+        return false;
       },
 
       createTrip: (title, start, end) =>
@@ -341,11 +372,18 @@ export const useStore = create<State & Actions>()(
             if (mode === 'replace') return { trips: incoming, activeId: incoming[0].id };
             const ids = new Set(s.trips.map((t) => t.id));
             const merged = [...s.trips];
+            // نتتبّع المعرّف الفعلي للرحلة الأولى المستوردة: إن كان مكرّرًا
+            // فسيُعطى معرّفًا جديدًا، وتثبيت activeId على القديم يجعله معلّقًا.
+            let firstId = '';
             for (const t of incoming) {
-              if (ids.has(t.id)) merged.push({ ...t, id: uid('t'), title: `${t.title} (مستورد)` });
-              else merged.push(t);
+              const added = ids.has(t.id)
+                ? { ...t, id: uid('t'), title: `${t.title} (مستورد)` }
+                : t;
+              merged.push(added);
+              ids.add(added.id);
+              if (!firstId) firstId = added.id;
             }
-            return { trips: merged, activeId: incoming[0].id };
+            return { trips: merged, activeId: firstId };
           });
           return { ok: true, message: `استُوردت ${incoming.length} رحلة` };
         } catch {

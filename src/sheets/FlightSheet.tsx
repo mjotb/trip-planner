@@ -10,12 +10,13 @@ export default function FlightSheet({ open }: { open: boolean }) {
   const close = useStore((s) => s.closeSheet);
   const addFlight = useStore((s) => s.addFlight);
   const toast = useStore((s) => s.toast);
+  const fail = useStore((s) => s.fail);
 
   const code = form.code ?? 'SV';
   const custom = code === 'OTHER';
 
   function save() {
-    if (!form.from || !form.to) return toast('أكمل مدينتي المغادرة والوصول');
+    if (!form.from || !form.to) return fail('أكمل مدينتي المغادرة والوصول', ['from', 'to']);
     addFlight({
       code: custom ? (form.customCode || '—').toUpperCase().slice(0, 3) : code,
       airline: custom ? (form.customName || 'ناقل آخر') : airlineOf(code)?.name ?? code,
@@ -70,8 +71,8 @@ export default function FlightSheet({ open }: { open: boolean }) {
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <Field label="من" value={form.from ?? ''} onChange={(v) => setField('from', v)} placeholder="الرياض RUH" />
-        <Field label="إلى" value={form.to ?? ''} onChange={(v) => setField('to', v)} placeholder="لندن LHR" />
+        <Field name="from" label="من" value={form.from ?? ''} onChange={(v) => setField('from', v)} placeholder="الرياض RUH" />
+        <Field name="to" label="إلى" value={form.to ?? ''} onChange={(v) => setField('to', v)} placeholder="لندن LHR" />
       </div>
 
       <Field label="التاريخ" type="date" value={form.date ?? ''} onChange={(v) => setField('date', v)} dir="ltr" />

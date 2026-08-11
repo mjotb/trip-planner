@@ -103,7 +103,7 @@ export default function App() {
         </nav>
 
         <Sheets trip={trip} blocks={blocks} />
-        <Toast message={ui.toast} />
+        <Toast message={ui.toast} kind={ui.toastKind} />
       </div>
     </div>
   );

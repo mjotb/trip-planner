@@ -16,6 +16,7 @@ export default function AiSheet({ open, trip, blocks }: { open: boolean; trip: T
   const addCity = useStore((s) => s.addCity);
   const setTab = useStore((s) => s.setTab);
   const toast = useStore((s) => s.toast);
+  const fail = useStore((s) => s.fail);
 
   const [mode, setMode] = useState<Mode>('day');
   const [interests, setInterests] = useState('');
@@ -47,11 +48,11 @@ export default function AiSheet({ open, trip, blocks }: { open: boolean; trip: T
   }
 
   function onApply() {
-    if (!answer.trim()) return toast('الصق ناتج الذكاء الاصطناعي أولًا');
+    if (!answer.trim()) return fail('الصق ناتج الذكاء الاصطناعي أولًا');
 
     if (mode === 'trip') {
       const res = parseCities(answer);
-      if (!res.ok) return toast(res.message);
+      if (!res.ok) return fail(res.message);
       for (const c of res.data) {
         addCity({
           name: c.name, country: c.country, flag: '',
@@ -66,7 +67,7 @@ export default function AiSheet({ open, trip, blocks }: { open: boolean; trip: T
     }
 
     const res = parseDayItems(answer, city?.name ?? '');
-    if (!res.ok) return toast(res.message);
+    if (!res.ok) return fail(res.message);
     addItems(day, res.data);
     close();
     setAnswer('');

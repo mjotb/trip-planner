@@ -15,11 +15,12 @@ export default function CitySheet({ open, isNew, trip }: { open: boolean; isNew:
   const editCity = useStore((s) => s.editCity);
   const removeCity = useStore((s) => s.removeCity);
   const toast = useStore((s) => s.toast);
+  const fail = useStore((s) => s.fail);
 
   const nights = form.nights ?? 2;
 
   function save() {
-    if (!form.name) return toast('اكتب اسم المدينة');
+    if (!form.name) return fail('اكتب اسم المدينة', ['name']);
     const payload = {
       name: form.name,
       country: form.country ?? '—',
@@ -60,7 +61,7 @@ export default function CitySheet({ open, isNew, trip }: { open: boolean; isNew:
       }
     >
       <div className="grid grid-cols-2 gap-2">
-        <Field label="المدينة" value={form.name ?? ''} onChange={(v) => setField('name', v)} placeholder="لندن" />
+        <Field name="name" label="المدينة" value={form.name ?? ''} onChange={(v) => setField('name', v)} placeholder="لندن" />
         <Field label="الدولة" value={form.country ?? ''} onChange={(v) => setField('country', v)} placeholder="المملكة المتحدة" />
       </div>
 
