@@ -8,5 +8,5 @@ import type { IconSlot } from './icons';
 type GeneratedDef = { file: string; mode: 'mask' | 'color' };
 
 export const GENERATED: Partial<Record<IconSlot, GeneratedDef>> = {
-  // لا توجد أيقونات مخصّصة بعد — ضع ملفاتك في public/assets/custom/
+  'tab-trip': { file: 'custom/tab-trip.svg', mode: 'mask' },
 };
