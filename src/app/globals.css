@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Dubai';
+  src: url('/fonts/Dubai-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Dubai';
+  src: url('/fonts/Dubai-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Dubai';
+  src: url('/fonts/Dubai-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Dubai';
+  src: url('/fonts/Dubai-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #e9eaec;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Dubai', 'Poppins', system-ui, sans-serif;
+  color: #0d151a;
+  overscroll-behavior-y: none;
+}
+
+/* الأرقام واللاتيني تُعزل عن سياق RTL حتى لا تنقلب */
+.num {
+  font-family: 'Poppins', system-ui, sans-serif;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* أيقونة ملوّنة عبر mask — تتيح تلوين أي SVG بأي لون */
+.icon {
+  display: inline-block;
+  flex: none;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: 2px solid #ffea75;
+  outline-offset: 1px;
+}
+
+/* شريط تمرير رفيع للصفوف الأفقية */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* خط رأسي متقطع في المخطط الزمني */
+.dash-line {
+  background: repeating-linear-gradient(to bottom, #cfd0d1 0 4px, transparent 4px 8px);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
