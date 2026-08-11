@@ -8,5 +8,6 @@ import type { IconSlot } from './icons';
 type GeneratedDef = { file: string; mode: 'mask' | 'color' };
 
 export const GENERATED: Partial<Record<IconSlot, GeneratedDef>> = {
+  'tab-day': { file: 'custom/tab-day.svg', mode: 'mask' },
   'tab-trip': { file: 'custom/tab-trip.svg', mode: 'mask' },
 };
