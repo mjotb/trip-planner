@@ -37,7 +37,7 @@ export default function DayScreen({ trip }: { trip: Trip }) {
   if (!keys.length) {
     return (
       <div className="px-5 pt-4">
-        <Empty icon="activity" text="لا توجد أيام بعد" hint="لوّن ليالي المبيت في تبويب «الليالي» أولًا" />
+        <Empty icon="empty-day" lottie="car" text="لا توجد أيام بعد" hint="لوّن ليالي المبيت في تبويب «الليالي» أولًا" />
       </div>
     );
   }
@@ -96,14 +96,14 @@ export default function DayScreen({ trip }: { trip: Trip }) {
             onClick={() => openSheet('ai', { mode: 'day' })}
             className="mr-auto flex flex-none items-center gap-1.5 rounded-12 bg-ink px-3 py-2.5 text-[10.5px] font-bold text-white"
           >
-            <Icon name="sparkle-cyan" size={14} color="#00A8DA" />
+            <Icon slot="ai-sparkle" size={14} color="#00A8DA" />
             تحسين المسار
           </button>
         </div>
 
         {/* المخطط الزمني */}
         {items.length === 0 ? (
-          <Empty icon="activity" text="لا يوجد نشاط لهذا اليوم" hint="أضف نشاطًا أو اطلب اقتراحًا بالذكاء الاصطناعي" />
+          <Empty icon="empty-day" text="لا يوجد نشاط لهذا اليوم" hint="أضف نشاطًا أو اطلب اقتراحًا بالذكاء الاصطناعي" />
         ) : (
           <div className="flex flex-col">
             {items.map((it, idx) => {
@@ -117,7 +117,7 @@ export default function DayScreen({ trip }: { trip: Trip }) {
                       className="flex h-[30px] w-[30px] items-center justify-center rounded-10"
                       style={{ background: t.tint }}
                     >
-                      <Icon name={t.icon} size={15} color="#3D4348" />
+                      <Icon slot={t.icon} size={15} color="#3D4348" />
                     </div>
                     {!last && <div className="dash-line w-px flex-1" />}
                   </div>
@@ -137,7 +137,7 @@ export default function DayScreen({ trip }: { trip: Trip }) {
                           aria-label="حذف النشاط"
                           className="mr-auto"
                         >
-                          <Icon name="dots" size={14} color="#9EA1A4" />
+                          <Icon slot="action-delete" size={14} color="#9EA1A4" />
                         </button>
                       </div>
 
@@ -154,7 +154,7 @@ export default function DayScreen({ trip }: { trip: Trip }) {
                             rel="noreferrer"
                             className="flex items-center gap-1 rounded-8 border border-line bg-white px-2 py-1.5 text-[9.5px] font-medium text-ink-2"
                           >
-                            <Icon name="pin" size={11} color="#6E7276" />
+                            <Icon slot="action-location" size={11} color="#6E7276" />
                             الموقع
                           </a>
                         )}
@@ -164,7 +164,7 @@ export default function DayScreen({ trip }: { trip: Trip }) {
                             onClick={() => openSheet('menu', { name: it.title })}
                             className="flex items-center gap-1 rounded-8 border border-line bg-white px-2 py-1.5 text-[9.5px] font-medium text-cyan-deep"
                           >
-                            <Icon name="sparkle-cyan" size={11} color="#00A8DA" />
+                            <Icon slot="ai-sparkle" size={11} color="#00A8DA" />
                             المنيو · ترجمة
                           </button>
                         )}
@@ -186,7 +186,7 @@ export default function DayScreen({ trip }: { trip: Trip }) {
           onClick={() => openSheet('activity', { type: 'place', time: '10:00', dur: 'ساعة' })}
           className="flex items-center justify-center gap-1.5 rounded-14 border border-dashed border-line py-3 text-[11.5px] font-medium text-muted-2"
         >
-          <Icon name="plus" size={13} color="#868A8D" />
+          <Icon slot="action-add" size={13} color="#868A8D" />
           إضافة نشاط لهذا اليوم
         </button>
 
@@ -197,7 +197,7 @@ export default function DayScreen({ trip }: { trip: Trip }) {
             rel="noreferrer"
             className="flex items-center justify-center gap-1.5 rounded-14 border border-line bg-surface py-3 text-[11.5px] font-medium text-ink-2"
           >
-            <Icon name="map-muted" size={14} color="#6E7276" />
+            <Icon slot="action-map" size={14} color="#6E7276" />
             فتح {city.name} في خرائط جوجل
           </a>
         )}

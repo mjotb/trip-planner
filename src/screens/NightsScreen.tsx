@@ -52,7 +52,7 @@ export default function NightsScreen({ trip, blocks }: { trip: Trip; blocks: Blo
             onClick={() => openSheet('newCity', { nights: 2 })}
             className="flex items-center justify-center gap-1.5 rounded-12 border border-dashed border-line py-3 text-[11.5px] font-medium text-muted-2"
           >
-            <Icon name="plus" size={13} color="#868A8D" />
+            <Icon slot="action-add" size={13} color="#868A8D" />
             أضف أول مدينة لتبدأ التلوين
           </button>
         ) : (
@@ -88,7 +88,7 @@ export default function NightsScreen({ trip, blocks }: { trip: Trip; blocks: Blo
               onClick={() => openSheet('newCity', { nights: 2 })}
               className="!border-dashed !py-2"
             >
-              <Icon name="plus" size={12} color="#868A8D" />
+              <Icon slot="action-add" size={12} color="#868A8D" />
               <span className="text-[10px] text-muted-3">مدينة</span>
             </Chip>
           </div>
@@ -113,7 +113,7 @@ export default function NightsScreen({ trip, blocks }: { trip: Trip; blocks: Blo
             activeBorder="#0D151A"
             className={ui.tool.type === 'erase' ? '!text-white' : ''}
           >
-            <Icon name="pencil" size={12} color={ui.tool.type === 'erase' ? '#fff' : '#868A8D'} />
+            <Icon slot="action-erase" size={12} color={ui.tool.type === 'erase' ? '#fff' : '#868A8D'} />
             ممحاة
           </Chip>
         </div>
@@ -121,7 +121,7 @@ export default function NightsScreen({ trip, blocks }: { trip: Trip; blocks: Blo
 
       {gaps.length > 0 && (
         <div className="flex items-start gap-2 rounded-12 border border-cream-line bg-cream px-3 py-2.5">
-          <Icon name="target" size={14} color="#DE8000" />
+          <Icon slot="status-warning" size={14} color="#DE8000" />
           <span className="text-[10.5px] leading-relaxed text-ink-2">
             فجوة في الليالي: {gaps.length} يوم داخل الرحلة بلا مدينة. تأكد أن هذا مقصود.
           </span>
@@ -235,12 +235,12 @@ export default function NightsScreen({ trip, blocks }: { trip: Trip; blocks: Blo
       {/* الإجراءات */}
       <div className="flex gap-2">
         <Btn variant="secondary" onClick={clearNights} className="flex-1 py-3">مسح الكل</Btn>
-        <Btn variant="primary" icon="share" onClick={onCopy} className="flex-1 py-3">نسخ جدول الحجوزات</Btn>
+        <Btn variant="primary" icon="action-copy" onClick={onCopy} className="flex-1 py-3">نسخ جدول الحجوزات</Btn>
       </div>
 
       {/* كتل الحجز */}
       {blocks.length === 0 ? (
-        <Empty icon="target" text="لا توجد كتل حجز بعد" hint="لوّن أيام المبيت أعلاه" />
+        <Empty icon="empty-cities" lottie="booking" text="لا توجد كتل حجز بعد" hint="لوّن أيام المبيت أعلاه" />
       ) : (
         <div className="flex flex-col gap-2">
           {blocks.map((b) => {

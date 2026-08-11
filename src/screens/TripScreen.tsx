@@ -58,7 +58,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
             onClick={() => openSheet('editTrip', { title: trip.title, start: trip.start, end: trip.end, id: trip.id })}
             className="mr-auto flex flex-none items-center gap-1 whitespace-nowrap rounded-8 border border-cream-line bg-white px-2 py-[5px] text-[10px] font-medium text-ink-2"
           >
-            <Icon name="pencil" size={11} color="#3D4348" />
+            <Icon slot="action-edit" size={11} color="#3D4348" />
             تعديل
           </button>
         </div>
@@ -84,7 +84,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
         onClick={() => openSheet('ai', { mode: 'day' })}
         className="flex animate-rise items-center gap-2.5 rounded-16 bg-ink p-[13px_15px] text-right"
       >
-        <Icon name="sparkle-cyan" size={20} color="#00A8DA" />
+        <Icon slot="ai-sparkle" size={20} color="#00A8DA" />
         <div className="flex min-w-0 flex-col gap-px">
           <span className="text-[12.5px] font-bold text-white">خطّط رحلتي بالذكاء الاصطناعي</span>
           <span className="text-[10px] font-light text-muted-5">انسخ الطلب، الصقه في Claude، ثم الصق الناتج هنا</span>
@@ -101,14 +101,14 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
             onClick={() => openSheet('flight', { code: 'SV', kind: 'ذهاب', cabin: 'اقتصادي' })}
             className="flex items-center gap-1 text-[10.5px] font-medium text-cyan-deep"
           >
-            <Icon name="plus" size={11} color="#0084AF" />
+            <Icon slot="action-add" size={11} color="#0084AF" />
             إضافة
           </button>
         }
       />
 
       {trip.flights.length === 0 ? (
-        <Empty icon="plane" text="لا توجد تذاكر بعد" hint="أضف تذكرة الذهاب والعودة لتظهر في جدول النسخ" />
+        <Empty icon="empty-flights" lottie="airplane" text="لا توجد تذاكر بعد" hint="أضف تذكرة الذهاب والعودة لتظهر في جدول النسخ" />
       ) : (
         trip.flights.map((f) => {
           const a = airlineOf(f.code);
@@ -134,7 +134,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
                   {f.date ? fmtShort(f.date) : '—'}
                 </span>
                 <button type="button" onClick={() => removeFlight(f.id)} aria-label="حذف التذكرة">
-                  <Icon name="dots" size={14} color="#9EA1A4" />
+                  <Icon slot="action-delete" size={14} color="#9EA1A4" />
                 </button>
               </div>
 
@@ -166,7 +166,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
             onClick={() => openSheet('newCity', { nights: 2 })}
             className="flex items-center gap-1 text-[10.5px] font-medium text-cyan-deep"
           >
-            <Icon name="plus" size={11} color="#0084AF" />
+            <Icon slot="action-add" size={11} color="#0084AF" />
             مدينة
           </button>
         }
@@ -174,7 +174,8 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
 
       {blocks.length === 0 ? (
         <Empty
-          icon="target"
+          icon="empty-cities"
+          lottie="booking"
           text="لم تُلوَّن ليالٍ بعد"
           hint="افتح تبويب «الليالي» واختر مدينة ثم انقر أيام المبيت"
         />
@@ -216,7 +217,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
               </div>
 
               <div className="flex items-center gap-2 rounded-12 border border-cream-line bg-cream px-2.5 py-2">
-                <Icon name="pin-orange" size={15} color="#DE8000" />
+                <Icon slot="action-location" size={15} color="#DE8000" />
                 <div className="flex min-w-0 flex-col gap-px">
                   <span className="truncate text-[11.5px] font-medium">{c.hotel}</span>
                   <span className="text-[9.5px] font-light text-muted">
@@ -244,7 +245,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
                   rel="noreferrer"
                   className="flex flex-1 items-center justify-center gap-1.5 rounded-12 border border-line bg-white py-2.5 text-[11.5px] font-medium text-ink-2"
                 >
-                  <Icon name="map-muted" size={14} color="#6E7276" />
+                  <Icon slot="action-map" size={14} color="#6E7276" />
                   خريطة جوجل
                 </a>
                 <button
@@ -252,7 +253,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
                   onClick={() => { setDay(b.start); setTab('day'); }}
                   className="flex flex-1 items-center justify-center gap-1.5 rounded-12 border border-primary-line bg-primary py-2.5 text-[11.5px] font-bold text-ink"
                 >
-                  <Icon name="activity" size={14} color="#0D151A" />
+                  <Icon slot="tab-day" size={14} color="#0D151A" />
                   مخطط الأيام
                 </button>
               </div>
@@ -262,7 +263,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
       )}
 
       {blocks.length > 0 && (
-        <Btn variant="dark" icon="share" onClick={onCopy} full className="mt-1 py-3">
+        <Btn variant="dark" icon="action-copy" onClick={onCopy} full className="mt-1 py-3">
           نسخ جدول الحجوزات
         </Btn>
       )}

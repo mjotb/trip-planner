@@ -1,3 +1,4 @@
+import type { IconSlot } from './icons';
 import type { ItemType, MoveId, PlaceType } from './types';
 
 /** ألوان المدن — الأربعة الأولى من التصميم، ثم تدوير على البقية. */
@@ -35,29 +36,29 @@ export function airlineOf(code: string) {
   return AIRLINES.find((a) => a.code === code);
 }
 
-export const MOVES: { id: MoveId; name: string; icon: string; dot: string }[] = [
-  { id: 'plane-out', name: 'طائرة مغادرة', icon: 'plane', dot: '#0084AF' },
-  { id: 'plane-in', name: 'طائرة وصول', icon: 'plane', dot: '#00BD74' },
-  { id: 'train', name: 'قطار', icon: 'train', dot: '#DE8000' },
-  { id: 'car', name: 'سيارة', icon: 'car', dot: '#8B3A62' },
-  { id: 'bus', name: 'حافلة', icon: 'car', dot: '#6E7276' },
+export const MOVES: { id: MoveId; name: string; icon: IconSlot; dot: string }[] = [
+  { id: 'plane-out', name: 'طائرة مغادرة', icon: 'type-plane', dot: '#0084AF' },
+  { id: 'plane-in', name: 'طائرة وصول', icon: 'type-plane', dot: '#00BD74' },
+  { id: 'train', name: 'قطار', icon: 'type-train', dot: '#DE8000' },
+  { id: 'car', name: 'سيارة', icon: 'type-car', dot: '#8B3A62' },
+  { id: 'bus', name: 'حافلة', icon: 'type-car', dot: '#6E7276' },
 ];
 
 export function moveOf(id: MoveId) {
   return MOVES.find((m) => m.id === id);
 }
 
-export const ITEM_TYPES: Record<ItemType, { label: string; icon: string; tint: string }> = {
-  place: { label: 'مَعلم', icon: 'activity', tint: '#ECF2FD' },
-  food: { label: 'مطعم', icon: 'food', tint: '#FFF7BA' },
-  metro: { label: 'مترو', icon: 'target', tint: '#E6F7FC' },
-  train: { label: 'قطار', icon: 'train', tint: '#FDF0E0' },
-  shop: { label: 'أسواق', icon: 'heart', tint: '#F7EAF1' },
-  hotel: { label: 'فندق', icon: 'bed', tint: '#E9F7F1' },
-  plane: { label: 'طيران', icon: 'plane', tint: '#E7EBF2' },
+export const ITEM_TYPES: Record<ItemType, { label: string; icon: IconSlot; tint: string }> = {
+  place: { label: 'مَعلم', icon: 'type-place', tint: '#ECF2FD' },
+  food: { label: 'مطعم', icon: 'type-food', tint: '#FFF7BA' },
+  metro: { label: 'مترو', icon: 'type-metro', tint: '#E6F7FC' },
+  train: { label: 'قطار', icon: 'type-train', tint: '#FDF0E0' },
+  shop: { label: 'أسواق', icon: 'type-shop', tint: '#F7EAF1' },
+  hotel: { label: 'فندق', icon: 'type-hotel', tint: '#E9F7F1' },
+  plane: { label: 'طيران', icon: 'type-plane', tint: '#E7EBF2' },
 };
 
-export const PLACE_TYPES: Record<PlaceType, { label: string; icon: string; tint: string }> = {
+export const PLACE_TYPES: Record<PlaceType, { label: string; icon: IconSlot; tint: string }> = {
   food: ITEM_TYPES.food,
   place: ITEM_TYPES.place,
   shop: ITEM_TYPES.shop,

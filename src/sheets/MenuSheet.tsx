@@ -62,7 +62,7 @@ export default function MenuSheet({ open }: { open: boolean }) {
     >
       {name && (
         <div className="flex items-center gap-2 rounded-12 bg-surface px-3 py-2.5">
-          <Icon name="food" size={15} color="#3D4348" />
+          <Icon slot="type-food" size={15} color="#3D4348" />
           <span className="text-[11.5px] font-bold">{name}</span>
         </div>
       )}
@@ -75,7 +75,7 @@ export default function MenuSheet({ open }: { open: boolean }) {
         </span>
       </div>
 
-      <Btn variant="dark" icon="share" onClick={onCopy} full className="py-3">نسخ طلب الترجمة</Btn>
+      <Btn variant="dark" icon="action-copy" onClick={onCopy} full className="py-3">نسخ طلب الترجمة</Btn>
 
       <TextArea
         label="الصق رد الترجمة"

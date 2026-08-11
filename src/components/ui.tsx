@@ -1,17 +1,38 @@
 'use client';
 
 import React from 'react';
-import { iconUrl } from '@/lib/asset';
+import { asset } from '@/lib/asset';
+import { iconDef, type IconSlot } from '@/lib/icons';
 import { useStore } from '@/lib/store';
+import Lottie, { type LottieName } from './Lottie';
 
 /* ------------------------------------------------------------------ */
 /* أيقونة                                                              */
 /* ------------------------------------------------------------------ */
 
+/**
+ * أيقونة من سجلّ الخانات (src/lib/icons.ts).
+ *
+ * الخانات ذات الوضع mask تُلوَّن بالخاصية color، والخانات ذات الوضع color
+ * تُعرض بألوانها الأصلية فتُتجاهل color — وهذا ما يتيح أيقونات ملوّنة
+ * وأخرى تتبع لون السياق في التطبيق نفسه.
+ */
 export function Icon({
-  name, size = 16, color = '#3D4348', className = '',
-}: { name: string; size?: number; color?: string; className?: string }) {
-  const url = `url(${iconUrl(name)})`;
+  slot, size = 16, color = '#3D4348', className = '',
+}: { slot: IconSlot; size?: number; color?: string; className?: string }) {
+  const def = iconDef(slot);
+  const url = `url(${asset(`/assets/${def.file}`)})`;
+
+  if (def.mode === 'color') {
+    return (
+      <span
+        aria-hidden
+        className={`flex-none bg-contain bg-center bg-no-repeat ${className}`}
+        style={{ width: size, height: size, backgroundImage: url }}
+      />
+    );
+  }
+
   return (
     <span
       aria-hidden
@@ -33,7 +54,7 @@ export function Icon({
 
 type BtnProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'primary' | 'secondary' | 'dark' | 'cream' | 'ghost';
-  icon?: string;
+  icon?: IconSlot;
   iconColor?: string;
   full?: boolean;
 };
@@ -55,7 +76,7 @@ export function Btn({
       className={`flex items-center justify-center gap-1.5 rounded-12 px-3 py-2.5 text-[11.5px] leading-none transition active:scale-[.98] disabled:opacity-40 ${BTN[variant]} ${full ? 'w-full' : ''} ${className}`}
       {...rest}
     >
-      {icon && <Icon name={icon} size={14} color={iconColor ?? (variant === 'dark' ? '#FFEA75' : '#3D4348')} />}
+      {icon && <Icon slot={icon} size={14} color={iconColor ?? (variant === 'dark' ? '#FFEA75' : '#3D4348')} />}
       {children}
     </button>
   );
@@ -181,10 +202,16 @@ export function SectionTitle({ title, action }: { title: string; action?: React.
   );
 }
 
-export function Empty({ icon, text, hint }: { icon: string; text: string; hint?: string }) {
+/**
+ * حالة فارغة. إن مُرِّر lottie عُرضت الحركة بدل الأيقونة الساكنة —
+ * والأيقونة تبقى بديلًا إن تعذّر تحميل المكتبة.
+ */
+export function Empty({
+  icon, text, hint, lottie,
+}: { icon: IconSlot; text: string; hint?: string; lottie?: LottieName }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-14 border border-dashed border-line px-4 py-7 text-center">
-      <Icon name={icon} size={22} color="#9EA1A4" />
+    <div className="flex flex-col items-center gap-1.5 rounded-14 border border-dashed border-line px-4 py-6 text-center">
+      {lottie ? <Lottie name={lottie} size={92} /> : <Icon slot={icon} size={22} color="#9EA1A4" />}
       <span className="text-[12px] font-medium text-muted-2">{text}</span>
       {hint && <span className="text-[10px] font-light text-muted-3">{hint}</span>}
     </div>

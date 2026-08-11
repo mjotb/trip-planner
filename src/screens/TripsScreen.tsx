@@ -51,7 +51,7 @@ export default function TripsScreen({ trips, activeId }: { trips: Trip[]; active
             }
             className="flex items-center gap-1 text-[10.5px] font-medium text-cyan-deep"
           >
-            <Icon name="plus" size={11} color="#0084AF" />
+            <Icon slot="action-add" size={11} color="#0084AF" />
             رحلة جديدة
           </button>
         }
@@ -103,12 +103,12 @@ export default function TripsScreen({ trips, activeId }: { trips: Trip[]; active
               {!on && (
                 <Btn variant="primary" onClick={() => selectTrip(t.id)} className="flex-1">فتح</Btn>
               )}
-              <Btn variant="secondary" icon="pencil"
+              <Btn variant="secondary" icon="action-edit"
                 onClick={() => openSheet('editTrip', { id: t.id, title: t.title, start: t.start, end: t.end })}
                 className="flex-1">
                 تعديل
               </Btn>
-              <Btn variant="secondary" icon="plus" onClick={() => duplicateTrip(t.id)} className="flex-1">
+              <Btn variant="secondary" icon="action-add" onClick={() => duplicateTrip(t.id)} className="flex-1">
                 نسخة
               </Btn>
               {confirmId === t.id ? (
@@ -136,7 +136,7 @@ export default function TripsScreen({ trips, activeId }: { trips: Trip[]; active
           ثم استورده على أي جهاز آخر لتتابع من حيث توقفت.
         </span>
 
-        <Btn variant="dark" icon="share" onClick={onExport} full className="py-3">
+        <Btn variant="dark" icon="action-copy" onClick={onExport} full className="py-3">
           تنزيل نسخة احتياطية (JSON)
         </Btn>
 

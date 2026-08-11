@@ -45,7 +45,7 @@ export default function PlacesScreen({ trip }: { trip: Trip }) {
             onClick={() => openSheet('place', { type: 'food' })}
             className="flex items-center gap-1 text-[10.5px] font-medium text-cyan-deep"
           >
-            <Icon name="plus" size={11} color="#0084AF" />
+            <Icon slot="action-add" size={11} color="#0084AF" />
             إضافة
           </button>
         }
@@ -53,7 +53,7 @@ export default function PlacesScreen({ trip }: { trip: Trip }) {
 
       {list.length === 0 ? (
         <Empty
-          icon="pin"
+          icon="empty-places"
           text="لا توجد أماكن في هذا التصنيف"
           hint="احفظ مطاعمك وأماكنك المهمة هنا لتضيفها لأي يوم بنقرة"
         />
@@ -64,14 +64,14 @@ export default function PlacesScreen({ trip }: { trip: Trip }) {
             <div key={p.id} className="flex animate-rise flex-col gap-2.5 rounded-15 border border-line p-[13px_14px]">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 flex-none items-center justify-center rounded-10" style={{ background: t.tint }}>
-                  <Icon name={t.icon} size={16} color="#3D4348" />
+                  <Icon slot={t.icon} size={16} color="#3D4348" />
                 </div>
                 <div className="flex min-w-0 flex-col gap-px">
                   <span className="truncate text-[13px] font-bold">{p.name}</span>
                   <span className="text-[10px] text-muted-3">{p.city} · {t.label}</span>
                 </div>
                 <button type="button" onClick={() => removePlace(p.id)} aria-label="حذف المكان" className="mr-auto">
-                  <Icon name="dots" size={14} color="#9EA1A4" />
+                  <Icon slot="action-delete" size={14} color="#9EA1A4" />
                 </button>
               </div>
 
@@ -100,7 +100,7 @@ export default function PlacesScreen({ trip }: { trip: Trip }) {
                   rel="noreferrer"
                   className="flex flex-1 items-center justify-center gap-1 rounded-12 border border-line bg-white py-2.5 text-[10.5px] font-medium text-ink-2"
                 >
-                  <Icon name="map-muted" size={13} color="#6E7276" />
+                  <Icon slot="action-map" size={13} color="#6E7276" />
                   الخريطة
                 </a>
                 {p.type === 'food' && (
@@ -109,7 +109,7 @@ export default function PlacesScreen({ trip }: { trip: Trip }) {
                     onClick={() => openSheet('menu', { name: p.name, placeId: p.id })}
                     className="flex flex-1 items-center justify-center gap-1 rounded-12 border border-cream-line bg-cream py-2.5 text-[10.5px] font-medium text-ink-2"
                   >
-                    <Icon name="sparkle-cyan" size={13} color="#00A8DA" />
+                    <Icon slot="ai-sparkle" size={13} color="#00A8DA" />
                     ترجمة المنيو
                   </button>
                 )}
@@ -125,7 +125,7 @@ export default function PlacesScreen({ trip }: { trip: Trip }) {
                   }}
                   className="flex flex-1 items-center justify-center gap-1 rounded-12 border border-primary-line bg-primary py-2.5 text-[10.5px] font-bold text-ink"
                 >
-                  <Icon name="plus" size={13} color="#0D151A" />
+                  <Icon slot="action-add" size={13} color="#0D151A" />
                   أضف لليوم
                 </button>
               </div>

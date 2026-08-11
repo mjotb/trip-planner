@@ -12,6 +12,7 @@
     "test:all": "npm test && npm run test:store"
   },
   "dependencies": {
+    "lottie-web": "^5.12.2",
     "next": "15.5.23",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

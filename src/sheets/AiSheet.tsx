@@ -87,7 +87,7 @@ export default function AiSheet({ open, trip, blocks }: { open: boolean; trip: T
       }
     >
       <div className="flex items-start gap-2 rounded-12 border border-cream-line bg-cream px-3 py-2.5">
-        <Icon name="sparkle-cyan" size={14} color="#00A8DA" />
+        <Icon slot="ai-sparkle" size={14} color="#00A8DA" />
         <span className="text-[10px] font-light leading-relaxed text-ink-2">
           بلا مفتاح API وبلا تكلفة: انسخ الطلب، الصقه في تطبيق Claude أو ChatGPT باشتراكك،
           ثم انسخ الرد كاملًا والصقه في الحقل الثاني.
@@ -140,7 +140,7 @@ export default function AiSheet({ open, trip, blocks }: { open: boolean; trip: T
         </>
       )}
 
-      <Btn variant="dark" icon="share" onClick={onCopy} full className="py-3">
+      <Btn variant="dark" icon="action-copy" onClick={onCopy} full className="py-3">
         {copied ? '✓ نُسخ الطلب — انسخه مجددًا' : '١ · نسخ الطلب'}
       </Btn>
 

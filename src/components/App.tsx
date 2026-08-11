@@ -11,13 +11,14 @@ import PlacesScreen from '@/screens/PlacesScreen';
 import TripsScreen from '@/screens/TripsScreen';
 import Sheets from '@/sheets/Sheets';
 import type { Tab } from '@/lib/types';
+import type { IconSlot } from '@/lib/icons';
 
-const TABS: { key: Tab; label: string; icon: string }[] = [
-  { key: 'trip', label: 'رحلتي', icon: 'map' },
-  { key: 'cal', label: 'الليالي', icon: 'target' },
-  { key: 'day', label: 'اليوم', icon: 'activity' },
-  { key: 'places', label: 'أماكني', icon: 'pin' },
-  { key: 'trips', label: 'رحلاتي', icon: 'pace' },
+const TABS: { key: Tab; label: string; icon: IconSlot }[] = [
+  { key: 'trip', label: 'رحلتي', icon: 'tab-trip' },
+  { key: 'cal', label: 'الليالي', icon: 'tab-nights' },
+  { key: 'day', label: 'اليوم', icon: 'tab-day' },
+  { key: 'places', label: 'أماكني', icon: 'tab-places' },
+  { key: 'trips', label: 'رحلاتي', icon: 'tab-trips' },
 ];
 
 const TITLES: Record<Tab, [string, string]> = {
@@ -57,7 +58,7 @@ export default function App() {
         {/* رأس ثابت */}
         <header className="flex flex-shrink-0 items-center gap-3 bg-white px-5 pb-2.5 pt-[max(20px,env(safe-area-inset-top))] sm:pt-[26px]">
           <div className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-11 bg-primary">
-            <Icon name="sparkle" size={19} color="#0D151A" />
+            <Icon slot="brand-logo" size={19} color="#0D151A" />
           </div>
           <div className="flex min-w-0 flex-col gap-px">
             <span className="truncate text-[16px] font-bold leading-tight">{title}</span>
@@ -90,7 +91,7 @@ export default function App() {
                 className="flex flex-1 flex-col items-center gap-1 rounded-12 py-1.5 transition"
                 style={{ background: on ? '#0D151A' : 'transparent' }}
               >
-                <Icon name={t.icon} size={17} color={on ? '#FFEA75' : '#9EA1A4'} />
+                <Icon slot={t.icon} size={17} color={on ? '#FFEA75' : '#9EA1A4'} />
                 <span
                   className="text-[9.5px] font-medium leading-none"
                   style={{ color: on ? '#fff' : '#868A8D' }}
