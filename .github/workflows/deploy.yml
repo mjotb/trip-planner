@@ -28,8 +28,12 @@ jobs:
       - name: تثبيت الحزم
         run: npm ci
 
+      # الأعلام تُنسخ أولًا لأن اختبار الأعلام يتحقق من وجود الملفات فعليًا
+      - name: تجهيز الأعلام والأيقونات
+        run: npm run flags && npm run icons
+
       - name: الاختبارات
-        run: npm test
+        run: npm run test:all
 
       - name: البناء
         # اسم المستودع يصير basePath حتى تعمل الأصول تحت المجلد الفرعي
