@@ -37,10 +37,10 @@ function emptyTrip(title: string, start: DayKey, end: DayKey): Trip {
 function seedTrip(): Trip {
   const t = emptyTrip('رحلة أوروبا · خريف 2026', '2026-10-20', '2026-11-04');
   t.cities = [
-    { id: 'uk', name: 'لندن', country: 'المملكة المتحدة', color: '#00A8DA', flag: 'flag-uk', hotel: 'The Bloomsbury', hotelMap: mapsLink('The Bloomsbury Hotel London'), map: mapsLink('London') },
-    { id: 'nl', name: 'أمستردام', country: 'هولندا', color: '#DE8000', flag: 'flag-nl', hotel: 'Pulitzer Amsterdam', hotelMap: mapsLink('Pulitzer Amsterdam'), map: mapsLink('Amsterdam') },
-    { id: 'be', name: 'بروكسل', country: 'بلجيكا', color: '#00BD74', flag: 'flag-be', hotel: 'Hotel Amigo', hotelMap: mapsLink('Hotel Amigo Brussels'), map: mapsLink('Brussels') },
-    { id: 'fr', name: 'باريس', country: 'فرنسا', color: '#E0619F', flag: 'flag-fr', hotel: 'Hôtel Le Six', hotelMap: mapsLink('Hotel Le Six Paris'), map: mapsLink('Paris') },
+    { id: 'uk', name: 'لندن', country: 'المملكة المتحدة', color: '#00A8DA', flag: 'flag-uk', countryIso: 'GB', hotel: 'The Bloomsbury', hotelMap: mapsLink('The Bloomsbury Hotel London'), map: mapsLink('London') },
+    { id: 'nl', name: 'أمستردام', country: 'هولندا', color: '#DE8000', flag: 'flag-nl', countryIso: 'NL', hotel: 'Pulitzer Amsterdam', hotelMap: mapsLink('Pulitzer Amsterdam'), map: mapsLink('Amsterdam') },
+    { id: 'be', name: 'بروكسل', country: 'بلجيكا', color: '#00BD74', flag: 'flag-be', countryIso: 'BE', hotel: 'Hotel Amigo', hotelMap: mapsLink('Hotel Amigo Brussels'), map: mapsLink('Brussels') },
+    { id: 'fr', name: 'باريس', country: 'فرنسا', color: '#E0619F', flag: 'flag-fr', countryIso: 'FR', hotel: 'Hôtel Le Six', hotelMap: mapsLink('Hotel Le Six Paris'), map: mapsLink('Paris') },
   ];
   const nights: Record<DayKey, CityId> = {};
   rangeKeys('2026-10-22', '2026-10-23').forEach((k) => (nights[k] = 'uk'));
@@ -56,8 +56,8 @@ function seedTrip(): Trip {
     '2026-11-02': 'plane-in',
   };
   t.flights = [
-    { id: uid('f'), code: 'SV', airline: 'الخطوط السعودية', kind: 'ذهاب', cabin: 'اقتصادي', date: '2026-10-22', from: 'الرياض RUH', to: 'لندن LHR', dep: '09:40', arr: '14:15', dur: '6س 35د' },
-    { id: uid('f'), code: 'KL', airline: 'الملكية الهولندية', kind: 'عودة', cabin: 'اقتصادي', date: '2026-11-02', from: 'باريس CDG', to: 'الرياض RUH', dep: '15:30', arr: '23:55', dur: '6س 25د' },
+    { id: uid('f'), code: 'SV', airline: 'الخطوط السعودية', kind: 'ذهاب', cabin: 'اقتصادي', date: '2026-10-22', from: 'الرياض RUH', to: 'لندن LHR', fromIata: 'RUH', toIata: 'LHR', dep: '09:40', arr: '14:15', dur: '6س 35د' },
+    { id: uid('f'), code: 'KL', airline: 'الملكية الهولندية', kind: 'عودة', cabin: 'اقتصادي', date: '2026-11-02', from: 'باريس CDG', to: 'الرياض RUH', fromIata: 'CDG', toIata: 'RUH', dep: '15:30', arr: '23:55', dur: '6س 25د' },
   ];
   t.plans = {
     '2026-10-22': [
@@ -134,6 +134,7 @@ type Actions = {
 
   // تذاكر
   addFlight: (f: Omit<Flight, 'id'>) => void;
+  updateFlight: (id: string, patch: Partial<Flight>) => void;
   removeFlight: (id: string) => void;
 
   // مخطط اليوم
@@ -294,6 +295,7 @@ export const useStore = create<State & Actions>()(
             name: c.name,
             country: c.country || '—',
             flag: c.flag || '',
+            countryIso: c.countryIso,
             hotel: c.hotel || 'لم يُحدَّد الفندق',
             hotelMap: c.hotelMap || (c.hotel ? mapsLink(`${c.hotel} ${c.name}`) : ''),
             map: c.map || mapsLink(c.name),
@@ -325,6 +327,8 @@ export const useStore = create<State & Actions>()(
         }),
 
       addFlight: (f) => get().patch((t) => { t.flights.push({ ...f, id: uid('f') }); }),
+      updateFlight: (id, patchF) =>
+        get().patch((t) => { t.flights = t.flights.map((f) => (f.id === id ? { ...f, ...patchF } : f)); }),
       removeFlight: (id) => get().patch((t) => { t.flights = t.flights.filter((f) => f.id !== id); }),
 
       addItem: (day, item) =>

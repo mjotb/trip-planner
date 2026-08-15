@@ -3,7 +3,8 @@
 import { useMemo } from 'react';
 import { useStore } from '@/lib/store';
 import { Btn, Chip, Empty, Icon } from '@/components/ui';
-import { flagUrl, tint } from '@/lib/asset';
+import { tint } from '@/lib/asset';
+import Flag from '@/components/Flag';
 import { MOVES } from '@/lib/constants';
 import {
   DOW_SHORT, fmtLong, hijriDay, isWeekend, monthsCovering, prevKey, type DayKey,
@@ -69,14 +70,9 @@ export default function NightsScreen({ trip, blocks }: { trip: Trip; blocks: Blo
                   className="!flex-col !items-start !gap-1 !px-2 !py-2"
                 >
                   <span className="flex w-full items-center gap-1.5">
-                    {c.flag ? (
-                      <span
-                        className="h-[14px] w-[14px] flex-none rounded-[4px] bg-cover bg-center"
-                        style={{ backgroundImage: `url(${flagUrl(c.flag)})` }}
-                      />
-                    ) : (
-                      <span className="h-[10px] w-[10px] flex-none rounded-full" style={{ background: c.color }} />
-                    )}
+                    {c.countryIso
+                      ? <Flag iso={c.countryIso} label={c.country} size="sm" className="!h-[13px] !w-[17px]" />
+                      : <span className="h-[10px] w-[10px] flex-none rounded-full" style={{ background: c.color }} />}
                     <span className="truncate text-[10.5px] font-bold">{c.name}</span>
                   </span>
                   <span className="num text-[9px] font-light text-muted-3">{counts[c.id] || 0} ليلة</span>

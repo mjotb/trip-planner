@@ -4,22 +4,25 @@
   "private": true,
   "description": "مخطط الرحلات — الليلة هي وحدة الحساب",
   "scripts": {
-    "predev": "node scripts/scan-icons.mjs",
+    "predev": "node scripts/scan-icons.mjs && node scripts/sync-flags.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/scan-icons.mjs",
+    "prebuild": "node scripts/scan-icons.mjs && node scripts/sync-flags.mjs",
     "build": "next build",
     "icons": "node scripts/scan-icons.mjs",
     "start": "npx serve out",
     "test": "node --test tests/nights.test.mjs",
     "test:store": "node tests/smoke.mjs",
-    "test:all": "npm test && npm run test:store"
+    "test:all": "npm test && npm run test:store && npm run test:flags",
+    "flags": "node scripts/sync-flags.mjs",
+    "test:flags": "node tests/flags.test.mjs"
   },
   "dependencies": {
     "lottie-web": "^5.12.2",
     "next": "15.5.23",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "zustand": "4.5.5"
+    "zustand": "4.5.5",
+    "flag-icons": "7.2.3"
   },
   "devDependencies": {
     "@types/node": "20.14.10",

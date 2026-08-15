@@ -3,12 +3,14 @@
 import { useStore } from '@/lib/store';
 import { Btn, Chip, Field, Sheet } from '@/components/ui';
 import { AIRLINES, airlineOf } from '@/lib/constants';
+import AirportPicker from '@/components/AirportPicker';
 
 export default function FlightSheet({ open }: { open: boolean }) {
   const form = useStore((s) => s.ui.form);
   const setField = useStore((s) => s.setField);
   const close = useStore((s) => s.closeSheet);
   const addFlight = useStore((s) => s.addFlight);
+  const updateFlight = useStore((s) => s.updateFlight);
   const toast = useStore((s) => s.toast);
   const fail = useStore((s) => s.fail);
 
@@ -17,7 +19,7 @@ export default function FlightSheet({ open }: { open: boolean }) {
 
   function save() {
     if (!form.from || !form.to) return fail('أكمل مدينتي المغادرة والوصول', ['from', 'to']);
-    addFlight({
+    const payload = {
       code: custom ? (form.customCode || '—').toUpperCase().slice(0, 3) : code,
       airline: custom ? (form.customName || 'ناقل آخر') : airlineOf(code)?.name ?? code,
       kind: form.kind ?? 'ذهاب',
@@ -25,11 +27,19 @@ export default function FlightSheet({ open }: { open: boolean }) {
       date: form.date ?? '',
       from: form.from,
       to: form.to,
+      fromIata: form.fromIata,
+      toIata: form.toIata,
       dep: form.dep || '00:00',
       arr: form.arr || '00:00',
       dur: form.dur || '—',
       ref: form.ref || undefined,
-    });
+    };
+    if (form.edit && form.id) {
+      updateFlight(form.id, payload);
+      close();
+      return toast('حُدّثت التذكرة');
+    }
+    addFlight(payload);
     close();
     toast('أُضيفت التذكرة');
   }
@@ -37,9 +47,9 @@ export default function FlightSheet({ open }: { open: boolean }) {
   return (
     <Sheet
       open={open}
-      title="إضافة تذكرة سفر"
+      title={form.edit ? 'تعديل التذكرة' : 'إضافة تذكرة سفر'}
       onClose={close}
-      footer={<Btn variant="primary" onClick={save} full className="py-3">حفظ التذكرة</Btn>}
+      footer={<Btn variant="primary" onClick={save} full className="py-3">{form.edit ? 'حفظ التعديل' : 'حفظ التذكرة'}</Btn>}
     >
       <span className="text-[10.5px] font-medium text-muted-3">الناقل</span>
       <div className="grid grid-cols-3 gap-1.5">
@@ -71,8 +81,18 @@ export default function FlightSheet({ open }: { open: boolean }) {
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <Field name="from" label="من" value={form.from ?? ''} onChange={(v) => setField('from', v)} placeholder="الرياض RUH" />
-        <Field name="to" label="إلى" value={form.to ?? ''} onChange={(v) => setField('to', v)} placeholder="لندن LHR" />
+        <AirportPicker
+          name="from" label="من"
+          valueText={form.from ?? ''} valueIata={form.fromIata}
+          onChange={(text, iata) => { setField('from', text); setField('fromIata', iata); }}
+          placeholder="مطار المغادرة"
+        />
+        <AirportPicker
+          name="to" label="إلى"
+          valueText={form.to ?? ''} valueIata={form.toIata}
+          onChange={(text, iata) => { setField('to', text); setField('toIata', iata); }}
+          placeholder="مطار الوصول"
+        />
       </div>
 
       <Field label="التاريخ" type="date" value={form.date ?? ''} onChange={(v) => setField('date', v)} dir="ltr" />

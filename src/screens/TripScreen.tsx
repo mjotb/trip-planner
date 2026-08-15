@@ -2,7 +2,9 @@
 
 import { useStore } from '@/lib/store';
 import { Btn, Empty, Icon, SectionTitle } from '@/components/ui';
-import { flagUrl, tint } from '@/lib/asset';
+import FlightCard from '@/components/FlightCard';
+import Flag from '@/components/Flag';
+import { tint } from '@/lib/asset';
 import { airlineOf } from '@/lib/constants';
 import { fmtLong, fmtShort } from '@/lib/dates';
 import { bookingText, nightKeys } from '@/lib/blocks';
@@ -110,51 +112,14 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
       {trip.flights.length === 0 ? (
         <Empty icon="empty-flights" lottie="airplane" text="لا توجد تذاكر بعد" hint="أضف تذكرة الذهاب والعودة لتظهر في جدول النسخ" />
       ) : (
-        trip.flights.map((f) => {
-          const a = airlineOf(f.code);
-          return (
-            <div key={f.id} className="flex animate-rise flex-col gap-2.5 rounded-15 border border-line p-[13px_14px]">
-              <div className="flex items-center gap-2.5">
-                <div
-                  className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-10"
-                  style={{ background: a?.tint ?? '#F1F1F2' }}
-                >
-                  <span className="num text-[12px] font-bold" style={{ color: a?.color ?? '#3D4348' }}>
-                    {f.code}
-                  </span>
-                </div>
-                <div className="flex min-w-0 flex-col gap-px">
-                  <span className="truncate text-[12.5px] font-medium">{f.airline || a?.name || f.code}</span>
-                  <span className="text-[10px] text-muted-3">
-                    {f.kind} · {f.cabin}
-                    {f.ref ? ` · ${f.ref}` : ''}
-                  </span>
-                </div>
-                <span className="mr-auto flex-none rounded-8 bg-cream px-2 py-1 text-[10px] text-ink-2">
-                  {f.date ? fmtShort(f.date) : '—'}
-                </span>
-                <button type="button" onClick={() => removeFlight(f.id)} aria-label="حذف التذكرة">
-                  <Icon slot="action-delete" size={14} color="#9EA1A4" />
-                </button>
-              </div>
-
-              <div className="flex items-center gap-3 rounded-12 bg-surface px-3 py-2.5">
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="num text-[14px] font-bold leading-none">{f.dep}</span>
-                  <span className="text-[9.5px] text-muted-3">{f.from}</span>
-                </div>
-                <div className="relative flex flex-1 flex-col items-center">
-                  <span className="num mb-1 text-[9px] text-muted-3">{f.dur}</span>
-                  <div className="h-px w-full bg-line-4" />
-                </div>
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="num text-[14px] font-bold leading-none">{f.arr}</span>
-                  <span className="text-[9.5px] text-muted-3">{f.to}</span>
-                </div>
-              </div>
-            </div>
-          );
-        })
+        trip.flights.map((f) => (
+          <FlightCard
+            key={f.id}
+            flight={f}
+            onRemove={() => removeFlight(f.id)}
+            onEdit={() => openSheet('flight', { ...f, edit: true })}
+          />
+        ))
       )}
 
       {/* المدن والإقامة */}
@@ -191,19 +156,7 @@ export default function TripScreen({ trip, blocks }: { trip: Trip; blocks: Block
               <span className="absolute inset-y-0 right-0 w-1" style={{ background: c.color }} />
 
               <div className="flex items-center gap-2.5 pr-1.5">
-                {c.flag ? (
-                  <span
-                    className="h-[26px] w-[26px] flex-none rounded-7 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${flagUrl(c.flag)})` }}
-                  />
-                ) : (
-                  <span
-                    className="flex h-[26px] w-[26px] flex-none items-center justify-center rounded-7 text-[12px] font-bold text-white"
-                    style={{ background: c.color }}
-                  >
-                    {c.name.slice(0, 1)}
-                  </span>
-                )}
+                <Flag iso={c.countryIso} label={c.country} />
                 <div className="flex min-w-0 flex-col gap-px">
                   <span className="truncate text-[13.5px] font-bold">{c.name}</span>
                   <span className="text-[10px] text-muted-3">{c.country}</span>

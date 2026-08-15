@@ -2,9 +2,10 @@
 
 import { useStore } from '@/lib/store';
 import { Btn, Chip, Field, Sheet, Stepper } from '@/components/ui';
-import { FLAGS, mapsLink } from '@/lib/constants';
+import { mapsLink } from '@/lib/constants';
 import { fmtShort } from '@/lib/dates';
-import { flagUrl } from '@/lib/asset';
+import Flag from '@/components/Flag';
+import { COUNTRIES, countryByIso } from '@/lib/airports';
 import type { Trip } from '@/lib/types';
 
 export default function CitySheet({ open, isNew, trip }: { open: boolean; isNew: boolean; trip: Trip }) {
@@ -25,6 +26,7 @@ export default function CitySheet({ open, isNew, trip }: { open: boolean; isNew:
       name: form.name,
       country: form.country ?? '—',
       flag: form.flag ?? '',
+      countryIso: form.countryIso,
       hotel: form.hotel ?? '',
       hotelMap: form.hotelMap || (form.hotel ? mapsLink(`${form.hotel} ${form.name}`) : ''),
       map: form.map || mapsLink(form.name),
@@ -65,19 +67,29 @@ export default function CitySheet({ open, isNew, trip }: { open: boolean; isNew:
         <Field label="الدولة" value={form.country ?? ''} onChange={(v) => setField('country', v)} placeholder="المملكة المتحدة" />
       </div>
 
-      <span className="text-[10.5px] font-medium text-muted-3">العلم (اختياري)</span>
-      <div className="flex gap-1.5">
-        {Object.entries(FLAGS).map(([k, file]) => (
-          <Chip key={k} active={form.flag === file} onClick={() => setField('flag', form.flag === file ? '' : file)}>
-            <span
-              className="h-[14px] w-[14px] rounded-[4px] bg-cover bg-center"
-              style={{ backgroundImage: `url(${flagUrl(file)})` }}
-            />
-          </Chip>
-        ))}
-        <Chip active={!form.flag} onClick={() => setField('flag', '')} className="flex-1">
-          بلا علم
-        </Chip>
+      <div className="flex flex-col gap-1.5">
+        <span className="text-[10.5px] font-medium text-muted-3">الدولة والعلم</span>
+        <div className="flex items-center gap-2 rounded-12 border border-line bg-surface px-3 py-2">
+          <Flag iso={form.countryIso} label={form.country} />
+          <select
+            value={form.countryIso ?? ''}
+            onChange={(e) => {
+              const iso = e.target.value;
+              setField('countryIso', iso || undefined);
+              const c = countryByIso(iso);
+              if (c && !form.country) setField('country', c.ar);
+            }}
+            className="flex-1 bg-transparent text-[12px] font-medium outline-none"
+          >
+            <option value="">— بلا علم —</option>
+            {COUNTRIES.map((c) => (
+              <option key={c.iso} value={c.iso}>{c.ar} ({c.iso})</option>
+            ))}
+          </select>
+        </div>
+        <span className="text-[9.5px] font-light text-muted-3">
+          العلم يُختار برمز الدولة حصريًا، لا باسم المدينة.
+        </span>
       </div>
 
       <Field label="فندق الإقامة" value={form.hotel ?? ''} onChange={(v) => setField('hotel', v)} placeholder="اسم الفندق" />

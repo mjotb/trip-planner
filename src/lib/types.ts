@@ -10,7 +10,9 @@ export type City = {
   name: string;
   country: string;
   color: string;
-  flag: string;      // مسار ملف علم أو '' لاستخدام الحرف الأول
+  flag: string;      // (قديم) اسم ملف علم في assets/flags — يبقى للتوافق
+  /** رمز الدولة ISO-2 — المفتاح الوحيد لاختيار العلم. */
+  countryIso?: string;
   hotel: string;
   hotelMap: string;  // رابط جوجل ماب للفندق
   map: string;       // رابط جوجل ماب للمدينة
@@ -26,6 +28,9 @@ export type Flight = {
   date: DayKey | '';
   from: string;
   to: string;
+  /** رمز IATA — المصدر الوحيد لعلم الدولة. النص أعلاه للعرض فقط. */
+  fromIata?: string;
+  toIata?: string;
   dep: string;       // "09:40"
   arr: string;
   dur: string;
