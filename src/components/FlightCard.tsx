@@ -3,7 +3,7 @@
 import { Icon } from './ui';
 import Flag from './Flag';
 import { airportByIata, extractIata } from '@/lib/airports';
-import { airlineOf } from '@/lib/constants';
+import { airlineOf } from '@/lib/airlines';
 import { fmtShort } from '@/lib/dates';
 import type { Flight } from '@/lib/types';
 
@@ -68,7 +68,7 @@ export default function FlightCard({
         </div>
 
         <div className="flex min-w-0 flex-col gap-px">
-          <span className="truncate text-[12.5px] font-bold">{flight.airline || airline?.name || flight.code}</span>
+          <span className="truncate text-[12.5px] font-bold" dir="ltr">{flight.airline || airline?.name || flight.code}</span>
           <span className="truncate text-[10px] text-muted-3">
             {flight.cabin}
             {flight.ref ? ` · ${flight.ref}` : ''}

@@ -17,24 +17,7 @@ export function nextCityColor(used: string[]): string {
   return CITY_PALETTE.find((c) => !used.includes(c)) ?? CITY_PALETTE[used.length % CITY_PALETTE.length];
 }
 
-export const AIRLINES = [
-  { code: 'SV', name: 'الخطوط السعودية', color: '#0E7C5A', tint: '#E6F4EF' },
-  { code: 'XY', name: 'طيران ناس', color: '#E8A200', tint: '#FDF4E0' },
-  { code: 'F3', name: 'طيران أديل', color: '#7A2E8E', tint: '#F3EAF6' },
-  { code: 'KL', name: 'الملكية الهولندية', color: '#00A1DE', tint: '#E4F4FB' },
-  { code: 'QR', name: 'الخطوط القطرية', color: '#5C0632', tint: '#F4E8EE' },
-  { code: 'EK', name: 'طيران الإمارات', color: '#D71921', tint: '#FBE8E9' },
-  { code: 'ET', name: 'الإثيوبية', color: '#7B9E00', tint: '#F1F5E0' },
-  { code: 'TK', name: 'الخطوط التركية', color: '#C70A0C', tint: '#FAE7E7' },
-  { code: 'MS', name: 'مصر للطيران', color: '#0B4EA2', tint: '#E5EDF7' },
-  { code: 'BA', name: 'الخطوط البريطانية', color: '#1B3B6F', tint: '#E7EBF2' },
-  { code: 'AF', name: 'الفرنسية', color: '#00256C', tint: '#E5E9F0' },
-  { code: 'LH', name: 'لوفتهانزا', color: '#05164D', tint: '#E5E7EE' },
-];
-
-export function airlineOf(code: string) {
-  return AIRLINES.find((a) => a.code === code);
-}
+// قائمة الناقلات انتقلت إلى src/lib/airlines.ts (مصدرها src/data/airlines.json)
 
 export const MOVES: { id: MoveId; name: string; icon: IconSlot; dot: string }[] = [
   { id: 'plane-out', name: 'طائرة مغادرة', icon: 'type-plane', dot: '#0084AF' },

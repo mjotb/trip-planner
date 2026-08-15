@@ -46,7 +46,17 @@ test('ملفات الأعلام صور SVG سليمة', () => {
 });
 
 test('علم واحد لكل دولة مهما تعدّدت مطاراتها — بلا تكرار', () => {
+  // مجموعة الأعلام تغطي دول المطارات ودول الناقلات معًا
   const codes = new Set(AIRPORTS.map((a) => a.country_iso2));
+  const airlinesPath = join(ROOT, 'src/data/airlines.json');
+  if (existsSync(airlinesPath)) {
+    for (const a of JSON.parse(readFileSync(airlinesPath, 'utf8'))) {
+      const iso = a.iata === 'SK' ? 'SE' : a.country;
+      if (/^[A-Z]{2}$/.test(iso ?? '')) codes.add(iso);
+    }
+    for (const iso of ['IT', 'SA', 'EG']) codes.add(iso); // ناقلات مضافة في الكود
+  }
+
   const files = readdirSync(FLAG_DIR).filter((f) => f.endsWith('.svg'));
   assert.equal(files.length, codes.size, 'عدد ملفات الأعلام يجب أن يساوي عدد الدول تمامًا');
 

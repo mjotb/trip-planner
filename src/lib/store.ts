@@ -56,8 +56,8 @@ function seedTrip(): Trip {
     '2026-11-02': 'plane-in',
   };
   t.flights = [
-    { id: uid('f'), code: 'SV', airline: 'الخطوط السعودية', kind: 'ذهاب', cabin: 'اقتصادي', date: '2026-10-22', from: 'الرياض RUH', to: 'لندن LHR', fromIata: 'RUH', toIata: 'LHR', dep: '09:40', arr: '14:15', dur: '6س 35د' },
-    { id: uid('f'), code: 'KL', airline: 'الملكية الهولندية', kind: 'عودة', cabin: 'اقتصادي', date: '2026-11-02', from: 'باريس CDG', to: 'الرياض RUH', fromIata: 'CDG', toIata: 'RUH', dep: '15:30', arr: '23:55', dur: '6س 25د' },
+    { id: uid('f'), code: 'SV', airline: 'Saudia', kind: 'ذهاب', cabin: 'اقتصادي', date: '2026-10-22', from: 'الرياض RUH', to: 'لندن LHR', fromIata: 'RUH', toIata: 'LHR', dep: '09:40', arr: '14:15', dur: '6س 35د' },
+    { id: uid('f'), code: 'KL', airline: 'KLM', kind: 'عودة', cabin: 'اقتصادي', date: '2026-11-02', from: 'باريس CDG', to: 'الرياض RUH', fromIata: 'CDG', toIata: 'RUH', dep: '15:30', arr: '23:55', dur: '6س 25د' },
   ];
   t.plans = {
     '2026-10-22': [

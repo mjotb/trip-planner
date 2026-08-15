@@ -2,8 +2,9 @@
 
 import { useStore } from '@/lib/store';
 import { Btn, Chip, Field, Sheet } from '@/components/ui';
-import { AIRLINES, airlineOf } from '@/lib/constants';
+import { airlineOf } from '@/lib/airlines';
 import AirportPicker from '@/components/AirportPicker';
+import AirlinePicker from '@/components/AirlinePicker';
 
 export default function FlightSheet({ open }: { open: boolean }) {
   const form = useStore((s) => s.ui.form);
@@ -15,13 +16,13 @@ export default function FlightSheet({ open }: { open: boolean }) {
   const fail = useStore((s) => s.fail);
 
   const code = form.code ?? 'SV';
-  const custom = code === 'OTHER';
+  const known = airlineOf(code);
 
   function save() {
     if (!form.from || !form.to) return fail('أكمل مدينتي المغادرة والوصول', ['from', 'to']);
     const payload = {
-      code: custom ? (form.customCode || '—').toUpperCase().slice(0, 3) : code,
-      airline: custom ? (form.customName || 'ناقل آخر') : airlineOf(code)?.name ?? code,
+      code,
+      airline: known?.name ?? form.customName ?? code,
       kind: form.kind ?? 'ذهاب',
       cabin: form.cabin || 'اقتصادي',
       date: form.date ?? '',
@@ -51,25 +52,14 @@ export default function FlightSheet({ open }: { open: boolean }) {
       onClose={close}
       footer={<Btn variant="primary" onClick={save} full className="py-3">{form.edit ? 'حفظ التعديل' : 'حفظ التذكرة'}</Btn>}
     >
-      <span className="text-[10.5px] font-medium text-muted-3">الناقل</span>
-      <div className="grid grid-cols-3 gap-1.5">
-        {AIRLINES.map((a) => (
-          <Chip key={a.code} active={code === a.code} onClick={() => setField('code', a.code)} className="!px-1.5">
-            <span className="num text-[9.5px] font-bold" style={{ color: a.color }}>{a.code}</span>
-            <span className="truncate text-[9px]">{a.name.replace('الخطوط ', '')}</span>
-          </Chip>
-        ))}
-        <Chip active={custom} onClick={() => setField('code', 'OTHER')} className="!px-1.5">
-          <span className="text-[9.5px]">＋ ناقل آخر</span>
-        </Chip>
-      </div>
-
-      {custom && (
-        <div className="grid grid-cols-2 gap-2">
-          <Field label="اسم الناقل" value={form.customName ?? ''} onChange={(v) => setField('customName', v)} placeholder="طيران الرياض" />
-          <Field label="الرمز" value={form.customCode ?? ''} onChange={(v) => setField('customCode', v)} placeholder="RX" dir="ltr" />
-        </div>
-      )}
+      <AirlinePicker
+        code={code}
+        customName={form.customName}
+        onChange={(c, name) => {
+          setField('code', c);
+          setField('customName', name);
+        }}
+      />
 
       <span className="pt-1 text-[10.5px] font-medium text-muted-3">النوع</span>
       <div className="flex gap-1.5">

@@ -5,7 +5,7 @@ import { Btn, Empty, Icon, SectionTitle } from '@/components/ui';
 import FlightCard from '@/components/FlightCard';
 import Flag from '@/components/Flag';
 import { tint } from '@/lib/asset';
-import { airlineOf } from '@/lib/constants';
+import { airlineOf } from '@/lib/airlines';
 import { fmtLong, fmtShort } from '@/lib/dates';
 import { bookingText, nightKeys } from '@/lib/blocks';
 import { copyText } from '@/lib/ai';

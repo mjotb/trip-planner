@@ -12,9 +12,10 @@
     "start": "npx serve out",
     "test": "node --test tests/nights.test.mjs",
     "test:store": "node tests/smoke.mjs",
-    "test:all": "npm test && npm run test:store && npm run test:flags",
+    "test:all": "npm test && npm run test:store && npm run test:flags && npm run test:airlines",
     "flags": "node scripts/sync-flags.mjs",
-    "test:flags": "node tests/flags.test.mjs"
+    "test:flags": "node tests/flags.test.mjs",
+    "test:airlines": "node --test tests/airlines.test.mjs"
   },
   "dependencies": {
     "lottie-web": "^5.12.2",
